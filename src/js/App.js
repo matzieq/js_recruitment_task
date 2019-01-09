@@ -60,6 +60,9 @@ export default class App {
                     this.pageSelector.setPages(data.response.pages);
                 }
                 this.newsList.populateList(data.response.results);
+            })
+            .catch(() => {
+                this.newsList.renderList([], this.newsList.newsListElement, 'There was a connection error')
             });
     }
 

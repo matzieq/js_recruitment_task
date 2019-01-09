@@ -37,7 +37,7 @@ export default class ReadLaterItem {
             console.log(newsList.readLaterList);
 
             // and then we render the list
-            newsList.renderList(newsList.readLaterList, newsList.readLaterElement, 'The list is empty');
+            newsList.renderReadLaterList();
         });
 
         return newLi;

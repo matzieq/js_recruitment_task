@@ -11,24 +11,26 @@ export default class NewsList {
     constructor (listSelector, readLaterSelector) {
 
         //these arrays will be filled with news items and used to map into html lists
-        this.itemList = [];
+        this.newsItemList = [];
         this.readLaterList = [];
 
-        this.listElement = document.querySelector(listSelector);  
-        this.readLaterElement = document.querySelector(readLaterSelector);    
+        this.newsListElement = document.querySelector(listSelector);  
+        this.readLaterElement = document.querySelector(readLaterSelector);
+
+        // the initial render call simply clears and prepares both lists
+        this.render();    
     }
 
     // this creates NewsItem elements from API data
     populateList (itemData) {
-        this.itemList = itemData.map(item => new NewsItem(item, this));
-        // this.renderList(this.itemList, this.listElement);
-        this.render();
+        this.newsItemList = itemData.map(item => new NewsItem(item, this));
+        // this.renderList(this.itemList, this.newsListElement);
+        this.renderNewsItemList();
     }
 
     render () {
-        this.renderList(this.itemList, this.listElement, 'No articles found');
-        this.renderList(this.readLaterList, this.readLaterElement, 'The list is empty');
-        
+        this.renderNewsItemList();
+        this.renderReadLaterList(); 
     }
 
     renderList (array, htmlElement, message) {
@@ -48,6 +50,14 @@ export default class NewsList {
         
     }
 
+    renderNewsItemList () {
+        this.renderList(this.newsItemList, this.newsListElement, 'No articles found');
+    }
+
+    renderReadLaterList () {
+        this.renderList(this.readLaterList, this.readLaterElement, 'The list is empty');
+    }
+
 
     // this is a callback for the event listener of the "Read Later" buttons
     createReadLaterElement(newsItem) {
@@ -64,6 +74,6 @@ export default class NewsList {
         console.log(newReadLaterItem);
         
         this.readLaterList.push(newReadLaterItem);
-        this.renderList(this.readLaterList, this.readLaterElement);
+        this.renderReadLaterList();
     }
 }
