@@ -15,7 +15,6 @@ export default class Selector {
     // it is very generic and is overridden in derived classes
     getQueryString () {
         const value = this.selectorElement.value.toLowerCase();
-        console.log(value);
         const queryString = value ? `&${this.filter}=${value}` : '';
         return queryString;
     }

@@ -15,7 +15,6 @@ export default class SectionSelector extends Selector {
     // otherwise it creates a query string fragment based on the option value
     getQueryString () {
         const value = this.selectorElement.value.toLowerCase();
-        console.log(value);
         const queryString = value === 'all' ? '' : `&section=${value}`;
         return queryString;
     }
@@ -29,24 +28,21 @@ export default class SectionSelector extends Selector {
         optionAll.value = 'All';
         optionAll.innerText = 'All';
         this.selectorElement.appendChild(optionAll);
+
+        // other options are built after fetching the section list
         fetch(`https://content.guardianapis.com/sections?api-key=${apiKey}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 for (let section of data.response.results) {
                     const newOption = document.createElement('option');
                     newOption.value = section.id;
-                    // newOption.innerText = this.capitalizeFirstLetter(section);
                     newOption.innerText = section.webTitle;
                     this.selectorElement.appendChild(newOption);
                 }
-            })
-        // the rest are then appended based on the array
+            }).catch((error) => {
+                console.log(error);
+            });
+        
     }
 
-
-    // a helper function to capitalize option descriptions
-    capitalizeFirstLetter (string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
 }

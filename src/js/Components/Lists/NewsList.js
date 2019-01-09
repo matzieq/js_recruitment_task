@@ -34,7 +34,6 @@ export default class NewsList {
     }
 
     renderList (array, htmlElement, message) {
-        console.log(array);
         // display something if either list is empty
         if (!array.length) {
             htmlElement.innerHTML = `<h2 style="color: #888"> ${message}</h2>`;
@@ -71,8 +70,6 @@ export default class NewsList {
         // next, we create a new read later item, add it to the appropriate array
         // and render the lists to incoproprate the changes
         const newReadLaterItem = new ReadLaterItem(newsItem, this);
-        console.log(newReadLaterItem);
-        
         this.readLaterList.push(newReadLaterItem);
         this.renderReadLaterList();
     }

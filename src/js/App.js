@@ -49,11 +49,9 @@ export default class App {
     fetchNews(arePagesReset) {
         if (arePagesReset) this.pageSelector.resetPages();
         const queryString = this.buildQueryString();
-        console.log(queryString);
         fetch(queryString)
             .then(response => response.json())
             .then(data => {
-                console.log(this.pageSelector.totalPageCount, data.response.pages);
                 if (arePagesReset) {
                     this.pageSelector.setPages(data.response.pages);
                 }

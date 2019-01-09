@@ -17,7 +17,6 @@ export default class PageSelector extends Selector {
     // this happens if no results match the filter parameters
     getQueryString () {
         const value = this.selectorElement.value;
-        console.log(value);
         const queryString = value ? `&page=${value}` : '';
         return queryString;
     }
@@ -32,7 +31,7 @@ export default class PageSelector extends Selector {
             newOption.innerText = i;
             this.selectorElement.appendChild(newOption);
         }
-        this.resetPages();
+        // this.resetPages();
     }
 
     // this is needed because we need to reset the query string each time a new filter is applied

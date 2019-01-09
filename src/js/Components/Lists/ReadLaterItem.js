@@ -32,10 +32,8 @@ export default class ReadLaterItem {
             newLi.remove();
 
             // but to remove it from the array we use filter to find matching id and delete it
-            newsList.readLaterList = newsList.readLaterList
-                .filter(element => element.id !== this.id);
-            console.log(newsList.readLaterList);
-
+            newsList.readLaterList = newsList.readLaterList.filter(element => element.id !== this.id);
+            
             // and then we render the list
             newsList.renderReadLaterList();
         });

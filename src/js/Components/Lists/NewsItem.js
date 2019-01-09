@@ -47,7 +47,7 @@ export default class NewsItem {
                     <button class="button button-outline">Read Later</button>
                 </section>
             </article>
-        `
+        `;
         // then we insert the template to the new list element
         const newLi = document.createElement('li');
         newLi.innerHTML = newsElement;

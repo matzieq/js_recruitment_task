@@ -8,7 +8,6 @@ export default class SearchField extends Selector {
     
     getQueryString () {
         const value = this.selectorElement.value.toLowerCase();
-        console.log(value);
 
         // in addition to the usual we must validate the input, because the query string
         // must not contain non-alphanumeric characters
