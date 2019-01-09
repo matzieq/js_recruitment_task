@@ -7,27 +7,18 @@ export default class NewsItemList {
         this.readLaterList = [];
         this.apiKey = apiKey;
         this.listElement = document.querySelector(listSelector);
-        this.currentPage = 1;
-        this.currentSection = "";
+        this.currentPageQueryString = "";
+        this.currentSectionQueryString = "";
     }
 
-    fetchNews(queryStringSection) {
-        this.currentSection = queryStringSection;
-        let queryStringStart = 'https://content.guardianapis.com/search'
-        let queryStringDate = `?from-date=${this.getPreviousMonth()}`;
-        let queryStringPage = `&page=${this.currentPage}`;
-        let queryStringApiKey = `&api-key=${this.apiKey}`;
-        let queryString = queryStringStart + queryStringDate + queryStringSection + queryStringPage + queryStringApiKey;
+    fetchNews() {
+        const queryString = this.buildQueryString();
         console.log(queryString);
         fetch(queryString)
         .then(response => response.json())
         .then(data => {
             console.log(data.response);
-            this.listElement.innerHTML = "";
-            this.itemList = data.response.results.map(item => new NewsItem(item));
-            for (let item of this.itemList) {
-                this.listElement.appendChild(item.htmlElement);
-            }
+            this.renderList(data.response.results);
         });
     }
 
@@ -36,5 +27,46 @@ export default class NewsItemList {
         d.setMonth(d.getMonth() - 1);
         const previousMonth = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
         return previousMonth;
+    }
+
+    renderList (itemData) {
+        this.listElement.innerHTML = "";
+        this.itemList = itemData.map(item => new NewsItem(item));
+        for (let item of this.itemList) {
+            this.listElement.appendChild(item.htmlElement);
+        }
+    }
+
+    buildQueryString() {
+        // this.currentSection = queryStringSection;
+        const start = 'https://content.guardianapis.com/search'
+        const date = `?from-date=${this.getPreviousMonth()}`;
+        const section = this.currentSectionQueryString;
+        const page = this.currentPageQueryString;
+        const key = `&api-key=${this.apiKey}`;
+
+        return start + date + section + page + key;
+    }
+
+    setSection (queryStringSection) {
+        this.currentSectionQueryString = queryStringSection;
+        this.fetchNews();
+    }
+
+    setPage (page) {
+        this.currentPage = page;
+        this.fetchNews();
+    }
+
+    filterNews(queryString, filter) {
+        switch (filter) {
+            case "section":
+                this.currentSectionQueryString = queryString;
+                break;
+            case "page":
+                this.currentPageQueryString = queryString;
+                break;
+        }
+        this.fetchNews();
     }
 }
