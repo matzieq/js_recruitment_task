@@ -4,7 +4,7 @@ import PageSelector from './Components/PageSelector';
 import SearchField from './Components/SearchField';
 
 export default class App {
-    constructor(listSelector, readLaterSelector, sectionSelector, pageSelector, apiKey) {    
+    constructor(listSelector, readLaterSelector, sectionSelector, pageSelector, searchFieldSelector, apiKey) {    
         this.apiKey = apiKey;
         this.newsList = new NewsList(listSelector, readLaterSelector, apiKey);
 
@@ -16,7 +16,7 @@ export default class App {
             this.filterNews();
         });
 
-        this.newsContentSearch = new SearchField('#newsContentSearch', this, () => {
+        this.newsContentSearch = new SearchField(searchFieldSelector, this, () => {
             this.filterNews();
         });
 
@@ -39,7 +39,7 @@ export default class App {
                     console.log(this.totalPageCount);
                     this.pageSelector.setPages();
                 }
-                this.newsList.renderList(data.response.results);
+                this.newsList.populateList(data.response.results);
             });
     }
 

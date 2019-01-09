@@ -11,7 +11,7 @@ export default class Selector {
     getQueryString () {
         const value = this.selectorElement.value.toLowerCase();
         console.log(value, this.filter);
-        const queryString = value === 'all' ? '' : `&${this.filter}=${value}`;
+        const queryString = value ? `&${this.filter}=${value}` : '';
         return queryString;
     }
 

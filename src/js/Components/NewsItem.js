@@ -1,11 +1,13 @@
 export default class NewsItem {
-    constructor(newsObj) {
+    constructor(newsObj, newsList) {
+        this.newsList = newsList;
         this.id = newsObj.id;
         this.title = newsObj.webTitle;
         this.sectionName = newsObj.sectionName;
         this.publicationDate = this.setDateFormat(newsObj.webPublicationDate);
         this.url = newsObj.webUrl;
         this.htmlElement = this.createElement();
+        this.readLaterElement = null;
     }
 
     setDateFormat(dateString) {
@@ -34,7 +36,10 @@ export default class NewsItem {
 
         const newLi = document.createElement('li');
         newLi.innerHTML = newsElement;
-
+        newLi.querySelector('button').addEventListener('click', () => {
+            this.newsList.createReadLaterElement(this);
+        });
         return newLi;
     }
+
 }
