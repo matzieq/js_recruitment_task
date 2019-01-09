@@ -1,60 +1,77 @@
+/**
+ *  MAIN CONTAINER CLASS
+ *  sets everything in motion
+ */
+
+
 import NewsList from './Components/NewsList';
 import SectionSelector from './Components/SectionSelector';
 import PageSelector from './Components/PageSelector';
 import SearchField from './Components/SearchField';
 
 export default class App {
-    constructor(listSelector, readLaterSelector, sectionSelector, pageSelector, searchFieldSelector, apiKey) {    
+    constructor(listSelector, readLaterSelector, sectionSelector, pageSelector, searchFieldSelector, apiKey, availableSections) {    
         this.apiKey = apiKey;
-        this.newsList = new NewsList(listSelector, readLaterSelector, apiKey);
 
-        this.pageSelector = new PageSelector(pageSelector, this, () => {
-            this.filterNews();
+        // the newsList class handles both the search result list and the read later list
+        // it accepts CSS selectors for appropriate elements
+        this.newsList = new NewsList(listSelector, readLaterSelector);
+
+        // The selector classes accept a CSS selector to get the appropriate element
+        // and a callback function which will be called every time the selector is changed
+    
+
+        this.pageSelector = new PageSelector(pageSelector, () => {
+            this.fetchNews(false);
         });
 
-        this.sectionSelector = new SectionSelector(sectionSelector, this, () => {
-            this.filterNews();
+        // this also accepts the 'available sections' array, which is used to populate the section
+        // selector element
+        this.sectionSelector = new SectionSelector(sectionSelector, () => {
+            this.fetchNews(true);
+        }, availableSections);
+
+        this.newsContentSearch = new SearchField(searchFieldSelector, () => {
+            this.fetchNews(true);
         });
 
-        this.newsContentSearch = new SearchField(searchFieldSelector, this, () => {
-            this.filterNews();
-        });
 
-        this.currentPageQueryString = "";
-        this.currentSectionQueryString = "";
-        this.currentSearchQueryString = "";
-        this.totalPageCount = 1;
-        this.fetchNews();
+        this.fetchNews(true);
     }
 
-    fetchNews() {
+    // This is the function which fetches the appropriate content from the API
+    // the 'arePagesReset' parameter decides whether the page list must be rebuilt and reset
+
+    fetchNews(arePagesReset) {
+        if (arePagesReset) this.pageSelector.resetPages();
         const queryString = this.buildQueryString();
         console.log(queryString);
         fetch(queryString)
             .then(response => response.json())
             .then(data => {
-                console.log(this.totalPageCount, data.response.pages);
-                if (data.response.pages != this.totalPageCount) {
-                    this.totalPageCount = data.response.pages;
-                    console.log(this.totalPageCount);
-                    this.pageSelector.setPages();
+                console.log(this.pageSelector.totalPageCount, data.response.pages);
+                if (arePagesReset) {
+                    this.pageSelector.setPages(data.response.pages);
                 }
                 this.newsList.populateList(data.response.results);
             });
     }
 
+    // this function builds the entire query string for the fetchNews function
+    // it uses the functions of the selector objects
+
     buildQueryString() {
-        // this.currentSection = queryStringSection;
         const start = 'https://content.guardianapis.com/search'
-        const date = `?from-date=${this.getPreviousMonth()}`;
+        const date = this.getDateQueryString();
         const section = this.sectionSelector.getQueryString();
         const page = this.pageSelector.getQueryString();
         const search = this.newsContentSearch.getQueryString();
-        const key = `&api-key=${this.apiKey}`;
+        const key = this.getApiKeyQueryString();
 
         return start + date + section + page + search + key;
     }
 
+    // this just returns the date with month decreased by one, in the format accepted by the API
     getPreviousMonth() {
         const d = new Date();
         d.setMonth(d.getMonth() - 1);
@@ -62,16 +79,13 @@ export default class App {
         return previousMonth;
     }
 
-
-    filterNews(queryString, filter) {
-        switch (filter) {
-            case "section":
-                this.currentSectionQueryString = queryString;
-                break;
-            case "page":
-                this.currentPageQueryString = queryString;
-                break;
-        }
-        this.fetchNews();
+    //these are helper functions to clean up the code
+    getDateQueryString () {
+        return `?from-date=${this.getPreviousMonth()}`;
     }
+
+    getApiKeyQueryString () {
+        return `&api-key=${this.apiKey}`;
+    }
+
 }

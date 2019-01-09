@@ -1,21 +1,36 @@
+/**
+ * This class is used to create elements for the search result list
+ */
+
 export default class NewsItem {
     constructor(newsObj, newsList) {
-        this.newsList = newsList;
+
+        // these are taken straight from the API
         this.id = newsObj.id;
         this.title = newsObj.webTitle;
         this.sectionName = newsObj.sectionName;
-        this.publicationDate = this.setDateFormat(newsObj.webPublicationDate);
         this.url = newsObj.webUrl;
-        this.htmlElement = this.createElement();
+
+        this.publicationDate = this.setDateFormat(newsObj.webPublicationDate);
+
+        // this holds the HTML list element
+        // it needs the reference to the parent element to attach approriate callbacks to buttons
+        this.htmlElement = this.createElement(newsList);
         
     }
 
+    // the date in the API contains also the time, we need to trim it and display it in
+    // the appropriate format;
     setDateFormat(dateString) {
         const newDateString = dateString.substring(0, 10).split("-").reverse().join(".");
         return newDateString;
     }
 
-    createElement() {
+
+    
+    createElement(newsList) {
+
+        // first, we make the template
         const newsElement = `
             <article class="news">
                 <header>
@@ -33,12 +48,15 @@ export default class NewsItem {
                 </section>
             </article>
         `
-
+        // then we insert the template to the new list element
         const newLi = document.createElement('li');
         newLi.innerHTML = newsElement;
+
+        // finally, we add a callback to the button
         newLi.querySelector('button').addEventListener('click', () => {
-            this.newsList.createReadLaterElement(this);
+            newsList.createReadLaterElement(this);
         });
+        
         return newLi;
     }
 

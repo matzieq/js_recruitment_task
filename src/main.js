@@ -1,6 +1,6 @@
 import './styles/main.css';
 import App from './js/App';
-
+import availableSections from './js/Components/availableSections';
 
 const apiKey = '7b7ccdf5-674e-4c27-bc96-d76275ee13eb';
 
@@ -11,7 +11,8 @@ const app = new App(
     '#sectionSelect', 
     '#activePageSelect', 
     '#newsContentSearch', 
-    apiKey
+    apiKey,
+    availableSections
 );
 
 

@@ -1,11 +1,19 @@
+/**
+ *  This is a class used to create elements for the read later list
+ */
+
 export default class ReadLaterItem {
     constructor(newsItem, newsList) {
-        this.newsList = newsList;
+        // the id is needed to make sure if there are no duplicates in the read later list
         this.id = newsItem.id;
-        this.htmlElement = this.createElement(newsItem);
+
+
+        this.htmlElement = this.createElement(newsItem, newsList);
     }
 
-    createElement (newsItem) {
+    createElement (newsItem, newsList) {
+
+        // first, we create the template
         const readLaterElement = `
             <h4 class="readLaterItem-title">${newsItem.title}</h4>
             <section>
@@ -13,17 +21,25 @@ export default class ReadLaterItem {
                 <button class="button button-clear">Remove</button>
             </section>      
         `;
+
+        // then we insert the template into a new list element
         const newLi = document.createElement('li');
         newLi.innerHTML = readLaterElement;
 
+        // finally, we attach a listener to the remove button
         newLi.querySelector('button').addEventListener('click', () => {
-            console.log(newLi, this.newsList.readLaterList);
+            // removing from HTML is simple enough
             newLi.remove();
-            this.newsList.readLaterList = this.newsList.readLaterList
+
+            // but to remove it from the array we use filter to find matching id and delete it
+            newsList.readLaterList = newsList.readLaterList
                 .filter(element => element.id !== this.id);
-            console.log(this.newsList.readLaterList);
-            this.newsList.renderList();
+            console.log(newsList.readLaterList);
+
+            // and then we render the list
+            newsList.renderList();
         });
+
         return newLi;
 
     }
