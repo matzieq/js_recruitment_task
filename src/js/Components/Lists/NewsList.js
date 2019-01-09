@@ -21,31 +21,33 @@ export default class NewsList {
     // this creates NewsItem elements from API data
     populateList (itemData) {
         this.itemList = itemData.map(item => new NewsItem(item, this));
-        this.renderList();
+        // this.renderList(this.itemList, this.listElement);
+        this.render();
     }
 
-    renderList () {
-        // reset both HTML lists
-        this.listElement.innerHTML = "";
-        this.readLaterElement.innerHTML = "";
+    render () {
+        this.renderList(this.itemList, this.listElement, 'No articles found');
+        this.renderList(this.readLaterList, this.readLaterElement, 'The list is empty');
         
+    }
+
+    renderList (array, htmlElement, message) {
+        console.log(array);
         // display something if either list is empty
-        if (!this.readLaterList.length) {
-            this.readLaterElement.innerHTML = '<h2 style="color: #888"> The list is empty </h2>'
-        }
-        if (!this.itemList.length) {
-            this.listElement.innerHTML = '<h2 style="color: #888"> No Articles found </h2>';
+        if (!array.length) {
+            htmlElement.innerHTML = `<h2 style="color: #888"> ${message}</h2>`;
             return;
         }
-
-        // fill both lists with appropriate items
-        for (let item of this.itemList) {
-            this.listElement.appendChild(item.htmlElement);
+        
+        // reset  HTML list
+        htmlElement.innerHTML = "";
+        // fill list with appropriate items
+        for (let item of array) {
+            htmlElement.appendChild(item.htmlElement);
         }
-        for (let item of this.readLaterList) {
-            this.readLaterElement.appendChild(item.htmlElement);
-        }
+        
     }
+
 
     // this is a callback for the event listener of the "Read Later" buttons
     createReadLaterElement(newsItem) {
@@ -62,6 +64,6 @@ export default class NewsList {
         console.log(newReadLaterItem);
         
         this.readLaterList.push(newReadLaterItem);
-        this.renderList();
+        this.renderList(this.readLaterList, this.readLaterElement);
     }
 }

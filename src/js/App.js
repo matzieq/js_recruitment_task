@@ -4,13 +4,21 @@
  */
 
 
-import NewsList from './Components/NewsList';
-import SectionSelector from './Components/SectionSelector';
-import PageSelector from './Components/PageSelector';
-import SearchField from './Components/SearchField';
+import NewsList from './Components/Lists/NewsList';
+import SectionSelector from './Components/Inputs/SectionSelector';
+import PageSelector from './Components/Inputs/PageSelector';
+import SearchField from './Components/Inputs/SearchField';
 
 export default class App {
-    constructor(listSelector, readLaterSelector, sectionSelector, pageSelector, searchFieldSelector, apiKey, availableSections) {    
+    constructor(
+        listSelector, 
+        readLaterSelector,
+        sectionSelector, 
+        pageSelector, 
+        searchFieldSelector, 
+        apiKey, 
+        availableSections
+    ) {    
         this.apiKey = apiKey;
 
         // the newsList class handles both the search result list and the read later list
@@ -19,8 +27,6 @@ export default class App {
 
         // The selector classes accept a CSS selector to get the appropriate element
         // and a callback function which will be called every time the selector is changed
-    
-
         this.pageSelector = new PageSelector(pageSelector, () => {
             this.fetchNews(false);
         });
@@ -41,7 +47,7 @@ export default class App {
 
     // This is the function which fetches the appropriate content from the API
     // the 'arePagesReset' parameter decides whether the page list must be rebuilt and reset
-
+    // which is always other than when the active page is changed
     fetchNews(arePagesReset) {
         if (arePagesReset) this.pageSelector.resetPages();
         const queryString = this.buildQueryString();
