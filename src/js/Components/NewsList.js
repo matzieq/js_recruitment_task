@@ -1,4 +1,5 @@
 import NewsItem from './NewsItem';
+import ReadLaterItem from './ReadLaterItem';
 
 
 export default class NewsList {
@@ -34,7 +35,7 @@ export default class NewsList {
             this.listElement.appendChild(item.htmlElement);
         }
         for (let item of this.readLaterList) {
-            this.readLaterElement.appendChild(item);
+            this.readLaterElement.appendChild(item.htmlElement);
         }
     }
 
@@ -43,24 +44,11 @@ export default class NewsList {
         for (let item of this.readLaterList) {
             if (item.id === newsItem.id) return;
         }
-        const readLaterElement = `
-            <h4 class="readLaterItem-title">${newsItem.title}</h4>
-            <section>
-                <a href="${newsItem.url}" target= "_blank" class="button button-clear">Read</a>
-                <button class="button button-clear">Remove</button>
-            </section>      
-        `;
-
-        const newLi = document.createElement('li');
-        newLi.innerHTML = readLaterElement;
-        newLi.id = newsItem.id;
-        console.log(newLi);
-        newLi.querySelector('button').addEventListener('click', () => {
-            newLi.remove();
-            this.readLaterList = this.readLaterList.filter(element => element.id !== newLi.id);
-            this.renderList();
-        });
-        this.readLaterList.push(newLi);
+        
+        const newReadLaterItem = new ReadLaterItem(newsItem, this);
+        console.log(newReadLaterItem);
+        
+        this.readLaterList.push(newReadLaterItem);
         this.renderList();
     }
 }

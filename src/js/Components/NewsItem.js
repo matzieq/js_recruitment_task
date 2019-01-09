@@ -7,7 +7,7 @@ export default class NewsItem {
         this.publicationDate = this.setDateFormat(newsObj.webPublicationDate);
         this.url = newsObj.webUrl;
         this.htmlElement = this.createElement();
-        this.readLaterElement = null;
+        
     }
 
     setDateFormat(dateString) {
