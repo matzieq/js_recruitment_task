@@ -17,7 +17,6 @@ export default class App {
         pageSelector, 
         searchFieldSelector, 
         apiKey, 
-        availableSections
     ) {    
         this.apiKey = apiKey;
 
@@ -31,11 +30,10 @@ export default class App {
             this.fetchNews(false);
         });
 
-        // this also accepts the 'available sections' array, which is used to populate the section
-        // selector element
+        // this also needs the API key to fetch available sections
         this.sectionSelector = new SectionSelector(sectionSelector, () => {
             this.fetchNews(true);
-        }, availableSections);
+        }, apiKey);
 
         this.newsContentSearch = new SearchField(searchFieldSelector, () => {
             this.fetchNews(true);

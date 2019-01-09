@@ -5,9 +5,9 @@
 import Selector from './Selector';
 
 export default class SectionSelector extends Selector {
-    constructor (selector, callback, availableSections) {
+    constructor (selector, callback, apiKey) {
         super(selector, callback);
-        this.buildMenu(availableSections);
+        this.buildMenu(apiKey);
     }
 
     // this checks if the 'all' option has been selected,
@@ -20,8 +20,8 @@ export default class SectionSelector extends Selector {
         return queryString;
     }
 
-    // this rebuilds all the options based on the passed array of strings
-    buildMenu(availableSections) {
+    // this rebuilds all the options based on data fetched from the API
+    buildMenu(apiKey) {
         this.selectorElement.innerHTML = "";
 
         // the first option is always the 'all' option
@@ -29,14 +29,19 @@ export default class SectionSelector extends Selector {
         optionAll.value = 'All';
         optionAll.innerText = 'All';
         this.selectorElement.appendChild(optionAll);
-
+        fetch(`https://content.guardianapis.com/sections?api-key=${apiKey}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                for (let section of data.response.results) {
+                    const newOption = document.createElement('option');
+                    newOption.value = section.id;
+                    // newOption.innerText = this.capitalizeFirstLetter(section);
+                    newOption.innerText = section.webTitle;
+                    this.selectorElement.appendChild(newOption);
+                }
+            })
         // the rest are then appended based on the array
-        for (let section of availableSections) {
-            const newOption = document.createElement('option');
-            newOption.value = section;
-            newOption.innerText = this.capitalizeFirstLetter(section);
-            this.selectorElement.appendChild(newOption);
-        }
     }
 
 
