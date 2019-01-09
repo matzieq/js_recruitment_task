@@ -34,14 +34,15 @@ export default class NewsList {
     }
 
     renderList (array, htmlElement, message) {
-        // display something if either list is empty
+        // display something if list is empty
         if (!array.length) {
             htmlElement.innerHTML = `<h2 style="color: #888"> ${message}</h2>`;
             return;
         }
-        
-        // reset  HTML list
+
+        // reset  HTML element
         htmlElement.innerHTML = "";
+
         // fill list with appropriate items
         for (let item of array) {
             htmlElement.appendChild(item.htmlElement);
@@ -49,6 +50,7 @@ export default class NewsList {
         
     }
 
+    // helper functions so that we do not have to enter long parameter lists at all times
     renderNewsItemList () {
         this.renderList(this.newsItemList, this.newsListElement, 'No articles found');
     }
@@ -68,7 +70,7 @@ export default class NewsList {
         }
         
         // next, we create a new read later item, add it to the appropriate array
-        // and render the lists to incoproprate the changes
+        // and render the list to incoroprate the changes
         const newReadLaterItem = new ReadLaterItem(newsItem, this);
         this.readLaterList.push(newReadLaterItem);
         this.renderReadLaterList();

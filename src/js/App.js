@@ -63,7 +63,7 @@ export default class App {
     }
 
     // this function builds the entire query string for the fetchNews function
-    // it uses the functions of the selector objects
+    // it uses the get query string functions of the selector objects
 
     buildQueryString() {
         const start = 'https://content.guardianapis.com/search'

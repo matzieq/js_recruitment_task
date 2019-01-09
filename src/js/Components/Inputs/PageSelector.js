@@ -31,7 +31,7 @@ export default class PageSelector extends Selector {
             newOption.innerText = i;
             this.selectorElement.appendChild(newOption);
         }
-        // this.resetPages();
+        
     }
 
     // this is needed because we need to reset the query string each time a new filter is applied
