@@ -1,34 +1,14 @@
 # JS Recruitment Task
 
-## Description
+## (Bonus) My approach to solving this task.
 
-We would like you to create an application that will display display list of news fetched from The Guardian. You should use their API, which can be found here: [https://open-platform.theguardian.com/](https://open-platform.theguardian.com/)
-
-Goal of this task is to check your JavaScript knowledge so please don't use any additional libraries, you can use `fetch` for http requests.
-
-We have provided sample html + css styling, so you can focus on writing JS code.
-
-## Requirements
-
-- Display list of news from last month
-- Add pagination: 10 items per page
-- Add news filtering based on section selection from dropdown. You can restrict it only to: `sport`, `books`, `business`, `culture`
-- Add search functionality for filtering news content based on provided phrase
-- Each news list element should have following elements:
-  - Title
-  - Section name
-  - Date of publication
-  - Link to full article (open in new window)
-  - "Read Later" button
-- Clicking "Read later" button should add selected news to the "Read later" section on the right. Those elements should be stored somewhere and displayed even after refresh.
-- Each element from "read later" can be removed by clicking "delete" button
-- (Bonus) If you will find time, please briefly describe your approach to solving this task.
-
-## Tools used
-
-In order to keep things simple we used only really small number of libs for this boilerplate:
-
-- [Parcel](https://en.parceljs.org) as a bundler
-- [Milligram](https://milligram.io/) and [Normalize](https://necolas.github.io/normalize.css/) for some simple styling
-- [Eslint](https://eslint.org/) and [Prettier](https://prettier.io/) for static code check
-- [PostCSS](https://postcss.org/) with [Autoprefixr](https://autoprefixer.github.io/) for css compatibility
+- First I played around with the API for a while to get a sense of its inner workings.
+- Then I quickly wrote some code to display something on the screen.
+- At first I wanted to use React, but alas - the requirements said 'no libraries'. So I decided to design my own component system.
+- I started from the ground up, first designing the smallest thing - a single news card - then the news list and then the app itself.
+- For communication between components, specifically the inputs and the news list, I used a 'hack' that is also ised to make react components transfer data upwards: I passed function references through "props" of sorts, which are then triggered by the inputs and applied to the news list.
+- The entire app then needed massive refactoring and bug fixes.
+- There is definitely room for improvement. For example, the naming conventions could use some work, the sections (which are fetched from the API) might need some filtering (for example, the app could ignore the sections which contain no articles whatsoever), and also a saving system for the read later list would be nice (for example to local storage). These would probably be my next steps were I to work on it some more.
+- I noticed that parcel does not handle the ES7 property initializer functionality out of the box. There were times I wished that I could get babel set up.
+- If I were designing the app from zero, I'd probably use react, because it's something I know. If I were designing the app from zero and had tons of time, I'd probably use vue, as I'd love to learn it in depth. It has much less overhead than react, and can be easily used in small 'splashes', not forcing you to get all in. 
+- Also, I enjoyed the task very much, thanks :)
